@@ -6,7 +6,7 @@
 
 using namespace std;
 
-/** MA433 final project code to find a 1 factorization for an n*2 degree complete graph.
+/** MA433 final project code to find a 1-factorization for an n degree complete graph where n is even.
  * To compile:
  * g++ -O1 k-factorization.cpp -o k-factorization
  * To run:
@@ -67,7 +67,7 @@ class Round {
       return daString;
     }
     /* pretty prints the round to string with labels*/
-    string toString(vector<string>& labels){
+    string toString(const vector<string>& labels){
       string daString = "";
      for(match theMatch : matches){
        daString += labels[theMatch.first] + " and " +  labels[theMatch.second] + " , ";
@@ -116,21 +116,21 @@ class Tournament {
     }
 
     /** Pretty print all matches in all rounds in tournament */
-    string toString(){
-      string daString  = "";
+    string& toString(){
+      string* pDaString  = new string("");
       for (Round theRound : rounds){
-	daString += theRound.toString();
-        daString += "\n";
+	*pDaString += theRound.toString();
+        *pDaString += "\n";
       }
-      return daString; 
+      return *pDaString; 
    }
    /** Pretty print all matches in all rounds with labels */
-   string toString(string inFilePath){
+   string& toString(string inFilePath){
       string line;
       vector <string> labels;
       ifstream inFile(inFilePath);       
       int lineCount= 0;
-      string daString;
+      string* pDaString = new string("");
       if (inFile.is_open()) {
         while (getline (inFile,line) && lineCount < n )
         {
@@ -139,13 +139,14 @@ class Tournament {
            lineCount++;
         }
         inFile.close();
+	if (lineCount < n){ cout << "Not enough labels to cover all vertices" << endl;}
      } else cout << "Unable to open file"; 
 
       for (Round theRound : rounds){
-	daString += theRound.toString(labels);
-        daString += "\n";
+	*pDaString += theRound.toString(labels);
+        *pDaString += "\n";
       }
-     return daString; 
+     return *pDaString; 
      }
 };
 
